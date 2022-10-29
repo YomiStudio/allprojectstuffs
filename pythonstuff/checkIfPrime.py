@@ -1,3 +1,4 @@
+#python function to check for prime number
 def checkIfPrime(num: int):
     exclude = {1,2}
     #if num in exclude:
