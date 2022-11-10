@@ -5,14 +5,26 @@
 int get_random_number();
 float get_mean_test(int max);
 void count_occurrence(int num,int* count);
-void tabulate_frequency_test(int max);
-void tabulate_serial_test(int max);
+void get_frequency_test(int max);
+void get_serial_test(int max);
+void get_poker_test(int max);
+void get_pocker_test(int max);
 int arr[10] = {0,0,0,0,0,0,0,0,0,0};
+void check_cardinality(int a, int b, int c, int d);
+int same_num, three_same, two_same_pair, one_same_pair,none_identical;
 
 int main() {
     // This is the entry point to the entire program.
     printf("Welcome to the Random Number Test\n");
     
+    /*char str[4];
+
+    str[0] = get_random_number();
+    str[1] = get_random_number();
+    str[2] = get_random_number();
+
+    printf("%d")*/
+
     //sample test, delete later
     int args;
     printf("Type the test option? ");
@@ -23,11 +35,23 @@ int main() {
     {
     case 1:
         //this branch presents the mean test result
-        printf("The mean test is %.2f",get_mean_test(1000));
+        printf("The mean test is %.2f\n",get_mean_test(1000));
         break;
     case 2:
         //this branch presents the frequency test result
-        tabulate_frequency_test(10000);
+        get_frequency_test(10000);
+        break;
+    case 3:
+        //this branch presents the serial test result
+        get_serial_test(10000);
+        break;
+    case 4:
+        //this branch presents the poker test result
+        get_poker_test(1000);
+        break;
+    case 5:
+        //this branch presents the pocker test result
+        get_pocker_test(1000);
         break;
     default:
         printf("The single number is %d\n",get_random_number());
@@ -95,7 +119,7 @@ void count_occurrence(int num,int* count){
 }
 
 //tabulate the frequency test when called
-void tabulate_frequency_test(int max){
+void get_frequency_test(int max){
     int i;
     float p;
 
@@ -112,6 +136,48 @@ void tabulate_frequency_test(int max){
     }
 }
 
-void tabulate_serial_test(int max){
+void get_serial_test(int max){
+    int i,j;
+    float p;
+    //2 dimensional array to hold the count of the pairs
     
 }
+//
+void get_poker_test(int max){
+    int i;
+    
+    for (i=1;i<=max;i++){
+        check_cardinality(get_random_number(),get_random_number(),get_random_number(),get_random_number());
+    }
+    printf("Table of Cardinality:\n");
+    printf("\n%d",same_num);
+    printf("\n%d",three_same);
+    printf("\n%d",two_same_pair);
+    printf("\n%d",one_same_pair);
+    printf("\n%d\n",none_identical);
+
+}
+
+void check_cardinality(int a, int b, int c, int d){
+    printf("%d%d%d%d\n",a,b,c,d);
+
+    if((a==b) && (b==c) && (c==d)){
+        same_num+=1;
+    }
+    else if (((a==b) && (b==c)) || ((b==c) && (c==d)) || ((a==c) && (c==d)) || ((a==b) && (b==d)) ){
+        three_same+=1;
+    }
+    else if(((a==b) && (c==d))){
+        two_same_pair+=1;
+    }
+    else if((((a==d) && (b!=c)) || ((a==c) && (b!=d)) || ((b==c) && (a!=d))|| ((b==d) && (a!=c)))){
+        one_same_pair+=1;
+    }
+    else
+        none_identical+=1;
+}
+
+void get_pocker_test(int max){
+
+}
+
