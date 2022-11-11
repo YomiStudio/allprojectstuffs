@@ -37,7 +37,7 @@ int main()
         break;
     case 3:
         // this branch presents the serial test result
-        get_serial_test(10000);
+        get_serial_test(5);
         break;
     case 4:
         // this branch presents the poker test result
@@ -163,7 +163,7 @@ void get_serial_test(int max)
         int s1 = get_random_number();
         int s2 = get_random_number();
         
-        printf("%d->%d",s1,s2);
+        printf("\n%d -> %d",s1,s2);
 
         for (i = 0, j = 0; i <= 9, j <= 9; i++, j++)
         {
@@ -176,11 +176,12 @@ void get_serial_test(int max)
         }
     }
     //calculate the percentage and print//
+    printf("\n");
     for ( i = 0; i < 10; i++)
     {
         for ( j = 0; j < 10; j++)
         {
-            printf("%d",arr[i][j]);
+            printf("%d,\t",arr[i][j]);
         }
         
     }
@@ -241,7 +242,7 @@ void get_pocker_test(int max)
 
    // change this to appropriate location
    //fptr = fopen("C:\\4randompairs.txt","w");
-   fptr = fopen(".\\Desktop\\4randompairs.txt","w");
+   fptr = fopen("/home/yomzy/Desktop/4randompairs.txt","w");
     
     //check if the process was successful, exit the program if it failed
    if(fptr == NULL)
