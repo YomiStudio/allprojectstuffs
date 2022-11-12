@@ -11,7 +11,7 @@ void get_poker_test(int max);
 void get_pocker_test(int max);
 int arr[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 void check_cardinality(int a, int b, int c, int d);
-void print_cardinality(int a, int b, int c, int d, int e);
+void print_cardinality();
 int same_num, three_same, two_same_pair, one_same_pair, none_identical;
 
 int main()
@@ -37,7 +37,7 @@ int main()
         break;
     case 3:
         // this branch presents the serial test result
-        get_serial_test(5);
+        get_serial_test(10000);
         break;
     case 4:
         // this branch presents the poker test result
@@ -146,47 +146,57 @@ void get_serial_test(int max)
     float p;
     // 2 dimensional array to hold the count of the pairs
     int arr[10][10];
-    
-    //initial the arrays with zeros
-    for ( i = 0; i < 10; i++)
+
+    // initialise the arrays with zeros
+    for (i = 0; i < 10; i++)
     {
-        for ( j = 0; j < 10; j++)
+        for (j = 0; j < 10; j++)
         {
-            arr[i][j]=0;
+            arr[i][j] = 0;
         }
-        
     }
-    
-    //get the numbers and count the pairs
+
+    // get the numbers and count the pairs
     for (n = 1; n <= max; n++)
     {
         int s1 = get_random_number();
         int s2 = get_random_number();
-        
-        printf("\n%d -> %d",s1,s2);
 
-        for (i = 0, j = 0; i <= 9, j <= 9; i++, j++)
+        //check for pairs with the numbers generated
+        for (i = 0; i <= 9; i++)
         {
             for (j = 0; j <= 9; j++)
             {
-                if ((s1 == i) && (s2 == j)){
-                    arr[i][j]+=1;
-                }                    
+                if ((s1 == i) && (s2 == j))
+                {
+                    arr[i][j] += 1;
+                    break;
+                }
             }
         }
     }
-    //calculate the percentage and print//
-    printf("\n");
-    for ( i = 0; i < 10; i++)
-    {
-        for ( j = 0; j < 10; j++)
+    
+    //print the labels from 0 to 9 across the column
+    printf("\n\t");
+    for (i = 0; i <= 9; i++)
         {
-            printf("%d,\t",arr[i][j]);
+            printf("*%d*\t",i);
         }
-        
+// calculate the percentage of each pair and print
+    for (i = 0; i < 10; i++)
+    {
+        //print the labels from 0 to 9 across the row
+        printf("\n*%d*",i);
+        for (j = 0; j < 10; j++)
+        {
+            //calculate the percentage
+            p = (float)arr[i][j] / max * 100;
+            //print the result
+            printf("\t%.2f", p);
+        }        
     }
 }
-//
+//this functions accepts a given number and generate 4 random pairs
 void get_poker_test(int max)
 {
     int i;
@@ -200,17 +210,16 @@ void get_poker_test(int max)
     print_cardinality(same_num, three_same, two_same_pair, one_same_pair, none_identical);
 }
 // print the result of the cardinality
-void print_cardinality(int a, int b, int c, int d, int e)
+void print_cardinality()
 {
-
     printf("Table of Cardinality:\n");
-    printf("\n%d", a);
-    printf("\n%d", b);
-    printf("\n%d", c);
-    printf("\n%d", d);
-    printf("\n%d\n", e);
+    printf("\n%d", same_num);
+    printf("\n%d", three_same);
+    printf("\n%d", two_same_pair);
+    printf("\n%d", one_same_pair);
+    printf("\n%d\n", none_identical);
 }
-
+//this functions checks for cardinality
 void check_cardinality(int a, int b, int c, int d)
 {
     printf("%d%d%d%d\n", a, b, c, d);
@@ -237,30 +246,46 @@ void check_cardinality(int a, int b, int c, int d)
 
 void get_pocker_test(int max)
 {
-    //declare the pointer variable for interacting with file
+    // declare the pointer variable for interacting with file
     FILE *fptr;
 
-   // change this to appropriate location
-   //fptr = fopen("C:\\4randompairs.txt","w");
-   fptr = fopen("/home/yomzy/Desktop/4randompairs.txt","w");
-    
-    //check if the process was successful, exit the program if it failed
-   if(fptr == NULL)
-   {
-      printf("Error!");   
-      exit(1);             
-   }
+    // change this to appropriate location
+    // fptr = fopen("C:\\4randompairs.txt","w");
+    fptr = fopen("/home/yomzy/Desktop/4randompairs.txt", "w");
 
-// get number and store in file
-   int n;
-   for (n=1;n<=max;n++){
-    fprintf(fptr,"%d%d%d%d\n",get_random_number(),get_random_number(),get_random_number(),get_random_number());
-   }
-   
-   fclose(fptr);
+    // check if the process was successful, exit the program if it failed
+    if (fptr == NULL)
+    {
+        printf("Error!");
+        exit(1);
+    }
+
+    // get number and store in file
+    int n;
+    for (n = 1; n <= max; n++)
+    {
+        fprintf(fptr, "%d%d%d%d\n", get_random_number(), get_random_number(), get_random_number(), get_random_number());
+    }
+
+    fclose(fptr);
     // retrieve the numbers from the file into variables
-
     // check for cardinality
+    char *num_row;
+    // if ((fptr = fopen("C:\\program.txt","r")) == NULL){
+    if ((fptr = fopen("/home/yomzy/Desktop/4randompairs.txt", "r")) == NULL)
+    {
+        printf("Error! opening file");
+        // Program exits if the file pointer returns NULL.
+        exit(1);
+    }
+    //reads the numbers in file until it gets to the end of the file
+    while ((fscanf(fptr, "%[^\n]", &num_row)) != EOF)
+    {
+        fgetc(fptr);
+        check_cardinality(atoi(num_row+0),atoi(num_row+1),atoi(num_row+2),atoi(num_row+3));
+    }
+    fclose(fptr);
 
     // print cardinality
+    print_cardinality();
 }
