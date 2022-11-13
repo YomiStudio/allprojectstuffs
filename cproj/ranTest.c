@@ -1,54 +1,68 @@
-#include <stdio.h>
+//This program is written by Festus
 
+//This program is designed to test randomness of generated pseudo random numbers 
+//according Kendall and Babbington-Smith.
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 // function declaration
 int get_random_number();
+float get_percentage(int frequency, int total);
 float get_mean_test(int max);
 void count_occurrence(int num, int *count);
 void get_frequency_test(int max);
 void get_serial_test(int max);
 void get_poker_test(int max);
 void get_pocker_test(int max);
-int arr[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 void check_cardinality(int a, int b, int c, int d);
 void print_cardinality();
+
+//variable declaration
+int arr[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int same_num, three_same, two_same_pair, one_same_pair, none_identical;
 
-int main()
+int main(int argc, char *argv[])
 {
     // This is the entry point to the entire program.
     printf("Welcome to the Random Number Test\n");
+    printf("Name: Festus \n");
 
-    // sample test, delete later
-    int args;
-    printf("Type the test option? ");
-    scanf("%d", &args);
-    // end here
-
-    switch (args)
+    int arg;
+    //check for option passed in the command line
+    if( argc == 2){
+        arg = (int) atoi(argv[1]);
+    }
+    else{
+        arg = 10;
+    }
+    switch (arg)
     {
     case 1:
         // this branch presents the mean test result
-        printf("The mean test is %.2f\n", get_mean_test(1000));
+        printf("The mean test for 1000 pseudo random numbers is %.2f\n", get_mean_test(1000));
         break;
     case 2:
         // this branch presents the frequency test result
+        printf("The Percentage of the Frequency of 10000 pseudo random numbers from zero(0) throught nine(9) is as follows:\n");
         get_frequency_test(10000);
         break;
     case 3:
         // this branch presents the serial test result
+        printf("The Percentage of the pair of 10000 pseudo random number from 00, 01,02,...99 is as follows:\n");
         get_serial_test(10000);
         break;
     case 4:
         // this branch presents the poker test result
+        printf("The cardinality of 1000 pseudo random number of four digits is as follows:\n");
         get_poker_test(1000);
         break;
     case 5:
         // this branch presents the pocker test result
-        get_pocker_test(1000);
+        printf("The cardinality of 1000 pseudo random number of four digits stored in a file is as follows:\n");
+        get_pocker_test(5);
         break;
     default:
-        printf("The single number is %d\n", get_random_number());
+        printf("The option selected is not available, choose a number between 1 and 5 inclusive\n");
         break;
     }
 
@@ -62,7 +76,11 @@ int get_random_number()
     int randon_number = (int)(10.0 * rand() / (RAND_MAX + 1.0));
     return randon_number;
 }
-
+//calculate and return the percentage from a given value
+float get_percentage(int frequency, int total){
+    float p = (float) frequency / total * 100;
+    return p;
+}
 // return the mean test
 float get_mean_test(int max)
 {
@@ -123,7 +141,6 @@ void count_occurrence(int num, int *count)
 void get_frequency_test(int max)
 {
     int i;
-    float p;
 
     // generate the random number supplied in the max and count their occurrence respectively.
     for (i = 1; i <= max; i++)
@@ -135,15 +152,13 @@ void get_frequency_test(int max)
     printf("Digit\tPercentage\n");
     for (i = 0; i < 10; i++)
     {
-        p = (float)arr[i] / max * 100;
-        printf("%d\t    %.2f\n", i, p);
+        printf("%d\t    %.2f\n", i, get_percentage(arr[i], max));
     }
 }
 
 void get_serial_test(int max)
 {
     int n, i, j;
-    float p;
     // 2 dimensional array to hold the count of the pairs
     int arr[10][10];
 
@@ -189,10 +204,8 @@ void get_serial_test(int max)
         printf("\n*%d*",i);
         for (j = 0; j < 10; j++)
         {
-            //calculate the percentage
-            p = (float)arr[i][j] / max * 100;
-            //print the result
-            printf("\t%.2f", p);
+            //calculate the percentage            
+            printf("\t%.2f", get_percentage(arr[i][j], max));
         }        
     }
 }
@@ -222,7 +235,7 @@ void print_cardinality()
 //this functions checks for cardinality
 void check_cardinality(int a, int b, int c, int d)
 {
-    printf("%d%d%d%d\n", a, b, c, d);
+    printf("%d-%d-%d-%d\n", a, b, c, d);
 
     if ((a == b) && (b == c) && (c == d))
     {
@@ -264,14 +277,15 @@ void get_pocker_test(int max)
     int n;
     for (n = 1; n <= max; n++)
     {
-        fprintf(fptr, "%d%d%d%d\n", get_random_number(), get_random_number(), get_random_number(), get_random_number());
+        fprintf(fptr, "%d %d %d %d\n", get_random_number(), get_random_number(), get_random_number(), get_random_number());
     }
 
     fclose(fptr);
+    exit(0);
     // retrieve the numbers from the file into variables
     // check for cardinality
-    char *num_row;
-    // if ((fptr = fopen("C:\\program.txt","r")) == NULL){
+    char num_row[5];
+    // if ((fptr = fopen("C:\\4randompairs.txt","r")) == NULL){
     if ((fptr = fopen("/home/yomzy/Desktop/4randompairs.txt", "r")) == NULL)
     {
         printf("Error! opening file");
@@ -279,13 +293,29 @@ void get_pocker_test(int max)
         exit(1);
     }
     //reads the numbers in file until it gets to the end of the file
-    while ((fscanf(fptr, "%[^\n]", &num_row)) != EOF)
+    int p0,p1,p2,p3;
+    char p;
+
+    while ((fscanf(fptr, "%[^\n]", num_row)) != EOF)
     {
         fgetc(fptr);
-        check_cardinality(atoi(num_row+0),atoi(num_row+1),atoi(num_row+2),atoi(num_row+3));
+        
+        while (num_row)
+        {
+            /* code */
+        }
+        
+
+        /*
+        p0 = (int) atoi(p);
+        p1 = (int) atoi(num_row);
+        p2 = (int) atoi(num_row);
+        p3 = (int) atoi(num_row);
+        
+       check_cardinality(p,p1,p2,p3);*/
     }
     fclose(fptr);
 
     // print cardinality
-    print_cardinality();
+    //print_cardinality();
 }
