@@ -1,7 +1,7 @@
-//This program is written by Festus
+// This program is written by Festus
 
-//This program is designed to test randomness of generated pseudo random numbers 
-//according Kendall and Babbington-Smith.
+// This program is designed to test randomness of generated pseudo random numbers
+// according Kendall and Babbington-Smith.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +17,7 @@ void get_pocker_test(int max);
 void check_cardinality(int a, int b, int c, int d);
 void print_cardinality();
 
-//variable declaration
+// variable declaration
 int arr[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int same_num, three_same, two_same_pair, one_same_pair, none_identical;
 
@@ -28,11 +28,13 @@ int main(int argc, char *argv[])
     printf("Name: Festus \n");
 
     int arg;
-    //check for option passed in the command line
-    if( argc == 2){
-        arg = (int) atoi(argv[1]);
+    // check for option passed in the command line
+    if (argc == 2)
+    {
+        arg = (int)atoi(argv[1]);
     }
-    else{
+    else
+    {
         arg = 10;
     }
     switch (arg)
@@ -76,9 +78,10 @@ int get_random_number()
     int randon_number = (int)(10.0 * rand() / (RAND_MAX + 1.0));
     return randon_number;
 }
-//calculate and return the percentage from a given value
-float get_percentage(int frequency, int total){
-    float p = (float) frequency / total * 100;
+// calculate and return the percentage from a given value
+float get_percentage(int frequency, int total)
+{
+    float p = (float)frequency / total * 100;
     return p;
 }
 // return the mean test
@@ -177,7 +180,7 @@ void get_serial_test(int max)
         int s1 = get_random_number();
         int s2 = get_random_number();
 
-        //check for pairs with the numbers generated
+        // check for pairs with the numbers generated
         for (i = 0; i <= 9; i++)
         {
             for (j = 0; j <= 9; j++)
@@ -190,26 +193,26 @@ void get_serial_test(int max)
             }
         }
     }
-    
-    //print the labels from 0 to 9 across the column
+
+    // print the labels from 0 to 9 across the column
     printf("\n\t");
     for (i = 0; i <= 9; i++)
-        {
-            printf("*%d*\t",i);
-        }
-// calculate the percentage of each pair and print
+    {
+        printf("*%d*\t", i);
+    }
+    // calculate the percentage of each pair and print
     for (i = 0; i < 10; i++)
     {
-        //print the labels from 0 to 9 across the row
-        printf("\n*%d*",i);
+        // print the labels from 0 to 9 across the row
+        printf("\n*%d*", i);
         for (j = 0; j < 10; j++)
         {
-            //calculate the percentage            
+            // calculate the percentage
             printf("\t%.2f", get_percentage(arr[i][j], max));
-        }        
+        }
     }
 }
-//this functions accepts a given number and generate 4 random pairs
+// this functions accepts a given number and generate 4 random pairs
 void get_poker_test(int max)
 {
     int i;
@@ -232,7 +235,7 @@ void print_cardinality()
     printf("\n%d", one_same_pair);
     printf("\n%d\n", none_identical);
 }
-//this functions checks for cardinality
+// this functions checks for cardinality
 void check_cardinality(int a, int b, int c, int d)
 {
     printf("%d-%d-%d-%d\n", a, b, c, d);
@@ -281,7 +284,7 @@ void get_pocker_test(int max)
     }
 
     fclose(fptr);
-    exit(0);
+    //exit(0);
     // retrieve the numbers from the file into variables
     // check for cardinality
     char num_row[5];
@@ -292,30 +295,59 @@ void get_pocker_test(int max)
         // Program exits if the file pointer returns NULL.
         exit(1);
     }
-    //reads the numbers in file until it gets to the end of the file
-    int p0,p1,p2,p3;
+    // reads the numbers in file until it gets to the end of the file
+    int count, p0, p1, p2, p3;
     char p;
+    char pr[2];
+    count=0;
+    while ((p = fgetc(fptr)) != EOF)
+    {
+        //printf("%c",p);
+        //char *c = p;
+        strcpy(pr,p);
+        switch (count)
+        {
+        case 0:
+            printf("%d - %c\n",count,p);
+            p0 = (int) atoi(pr);
+            break;
+        case 2:
+            //printf("%d - %c\n",count,p);
+            p1 = (int) atoi(pr);
+            break;
+        case 4:
+            //printf("%d - %c\n",count,p);
+            p2 = (int) atoi(pr);
+            break;
+        case 6:
+            //printf("%d - %c\n",count,p);
+            p3 = (int) atoi(pr);
+            break;        
+        default:
+            break;
+        }
 
-    while ((fscanf(fptr, "%[^\n]", num_row)) != EOF)
+        count+=1;
+        if (p == '\n')
+        {
+           check_cardinality(p0,p1,p2,p3);
+           count = 0;
+        }
+    }
+    /*while ((fscanf(fptr, "%[^\n]", num_row)) != EOF)
     {
         fgetc(fptr);
-        
-        while (num_row)
-        {
-            /* code */
-        }
-        
 
         /*
         p0 = (int) atoi(p);
         p1 = (int) atoi(num_row);
         p2 = (int) atoi(num_row);
         p3 = (int) atoi(num_row);
-        
-       check_cardinality(p,p1,p2,p3);*/
-    }
+
+       check_cardinality(p,p1,p2,p3);
+    }*/
     fclose(fptr);
 
     // print cardinality
-    //print_cardinality();
+    print_cardinality();
 }
