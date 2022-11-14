@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     case 5:
         // this branch presents the pocker test result
         printf("The cardinality of 1000 pseudo random number of four digits stored in a file is as follows:\n");
-        get_pocker_test(5);
+        get_pocker_test(1000);
         break;
     default:
         printf("The option selected is not available, choose a number between 1 and 5 inclusive\n");
