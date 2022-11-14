@@ -4,7 +4,7 @@
 // according Kendall and Babbington-Smith.
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
 // function declaration
 int get_random_number();
 float get_percentage(int frequency, int total);
@@ -229,33 +229,37 @@ void get_poker_test(int max)
 void print_cardinality()
 {
     printf("Table of Cardinality:\n");
-    printf("\n%d", same_num);
-    printf("\n%d", three_same);
-    printf("\n%d", two_same_pair);
-    printf("\n%d", one_same_pair);
-    printf("\n%d\n", none_identical);
+    printf("\nNo of 4 digits the same: %d", same_num);
+    printf("\nNo of 3 digits the same: %d", three_same);
+    printf("\nNo of Two digit pair: %d", two_same_pair);
+    printf("\nNo of One digit pair: %d", one_same_pair);
+    printf("\nNo of None-identical digits: %d\n", none_identical);
 }
 // this functions checks for cardinality
 void check_cardinality(int a, int b, int c, int d)
 {
     printf("%d-%d-%d-%d\n", a, b, c, d);
-
+    //4444
     if ((a == b) && (b == c) && (c == d))
     {
         same_num += 1;
     }
+    //4442, 1444, 4144,4441
     else if (((a == b) && (b == c)) || ((b == c) && (c == d)) || ((a == c) && (c == d)) || ((a == b) && (b == d)))
     {
         three_same += 1;
     }
+    //4433
     else if (((a == b) && (c == d)))
     {
         two_same_pair += 1;
     }
+    //4124,4341,1442,1424
     else if ((((a == d) && (b != c)) || ((a == c) && (b != d)) || ((b == c) && (a != d)) || ((b == d) && (a != c))))
     {
         one_same_pair += 1;
     }
+    //8172
     else
         none_identical += 1;
 }
@@ -298,30 +302,23 @@ void get_pocker_test(int max)
     // reads the numbers in file until it gets to the end of the file
     int count, p0, p1, p2, p3;
     char p;
-    char pr[2];
+    //char pr[2];
     count=0;
     while ((p = fgetc(fptr)) != EOF)
     {
-        //printf("%c",p);
-        //char *c = p;
-        strcpy(pr,p);
         switch (count)
         {
         case 0:
-            printf("%d - %c\n",count,p);
-            p0 = (int) atoi(pr);
+            p0 = (int) atoi(&p);
             break;
         case 2:
-            //printf("%d - %c\n",count,p);
-            p1 = (int) atoi(pr);
+            p1 = (int) atoi(&p);
             break;
         case 4:
-            //printf("%d - %c\n",count,p);
-            p2 = (int) atoi(pr);
+            p2 = (int) atoi(&p);
             break;
         case 6:
-            //printf("%d - %c\n",count,p);
-            p3 = (int) atoi(pr);
+            p3 = (int) atoi(&p);
             break;        
         default:
             break;
@@ -334,18 +331,6 @@ void get_pocker_test(int max)
            count = 0;
         }
     }
-    /*while ((fscanf(fptr, "%[^\n]", num_row)) != EOF)
-    {
-        fgetc(fptr);
-
-        /*
-        p0 = (int) atoi(p);
-        p1 = (int) atoi(num_row);
-        p2 = (int) atoi(num_row);
-        p3 = (int) atoi(num_row);
-
-       check_cardinality(p,p1,p2,p3);
-    }*/
     fclose(fptr);
 
     // print cardinality
